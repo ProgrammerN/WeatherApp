@@ -17,22 +17,27 @@ class LocalWeatherRepository(application: Application) : CoroutineScope {
     private var weatherDao: WeatherDao?
     private var weatherResponseList: LiveData<List<WeatherResponse>>? = null
 
-
     init {
         val db = WeatherDatabase.getInstance(application)
-        weatherDao = db?.WeatherDao()
+        weatherDao = db.WeatherDao()
     }
 
     fun insert(superhero: WeatherResponse) {
-        launch { insertWeatherResponse(superhero) }
+        launch {
+            insertWeatherResponse(superhero)
+        }
     }
 
     fun update(superhero: WeatherResponse) {
-        launch { updateWeatherResponse(superhero) }
+        launch {
+            updateWeatherResponse(superhero)
+        }
     }
 
     fun delete(superhero: WeatherResponse) {
-        launch { deleteWeatherResponse(superhero) }
+        launch {
+            deleteWeatherResponse(superhero)
+        }
     }
 
     fun exists(id: Int): LiveData<Boolean>? {
@@ -62,6 +67,5 @@ class LocalWeatherRepository(application: Application) : CoroutineScope {
         weatherResponseList = weatherDao?.getAllCurrentWeather()
         return weatherResponseList
     }
-
 
 }

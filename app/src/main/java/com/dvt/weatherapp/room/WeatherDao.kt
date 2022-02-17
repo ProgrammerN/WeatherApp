@@ -9,13 +9,13 @@ import com.dvt.weatherapp.models.WeatherResponse
 interface WeatherDao {
 
     @Insert(onConflict = REPLACE)
-    suspend fun insertCurrentWeather(superhero: WeatherResponse)
+    suspend fun insertCurrentWeather(weatherResponse: WeatherResponse)
 
     @Update
-    suspend fun update(superhero: WeatherResponse)
+    suspend fun update(weatherResponse: WeatherResponse)
 
     @Delete
-    suspend fun delete(superhero: WeatherResponse)
+    suspend fun delete(weatherResponse: WeatherResponse)
 
     @Query("SELECT EXISTS(SELECT * FROM current_weather_table WHERE id=(:id))")
     fun exists(id: Int): LiveData<Boolean>

@@ -1,7 +1,6 @@
 package com.dvt.weatherapp.activities.home.ui.favorites
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,12 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dvt.weatherapp.adapters.FavoriteWeatherItemAdapter
 import com.dvt.weatherapp.databinding.FragmentFavoritesBinding
 import com.dvt.weatherapp.viewmodels.LocalWeatherViewModel
+import timber.log.Timber
 
 class FavoritesFragment : Fragment() {
 
     private var _binding: FragmentFavoritesBinding? = null
     private val binding get() = _binding!!
-
     private val localWeatherViewModel: LocalWeatherViewModel by viewModels()
     private lateinit var mWeatherItemAdapter: FavoriteWeatherItemAdapter
 
@@ -24,7 +23,8 @@ class FavoritesFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+
+    ): View {
 
         _binding = FragmentFavoritesBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -39,8 +39,7 @@ class FavoritesFragment : Fragment() {
     private fun showFavorites() {
         localWeatherViewModel.getAllCurrentWeather()?.observe(this, {
             mWeatherItemAdapter = FavoriteWeatherItemAdapter(context!!, it)
-
-            Log.d("Nigel", it[0].name.toString())
+            Timber.d(it[0].name.toString())
             binding.recyclerView.adapter = mWeatherItemAdapter
         })
     }

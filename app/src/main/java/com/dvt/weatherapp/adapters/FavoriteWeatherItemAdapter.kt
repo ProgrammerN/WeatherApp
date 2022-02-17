@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -15,14 +14,13 @@ import com.dvt.weatherapp.R
 import com.dvt.weatherapp.models.WeatherResponse
 import com.dvt.weatherapp.util.Utils
 
-
-class FavoriteWeatherItemAdapter(private val context: Context, items: List<WeatherResponse>) :
+class FavoriteWeatherItemAdapter(context: Context, items: List<WeatherResponse>) :
 
     RecyclerView.Adapter<FavoriteWeatherItemAdapter.MyViewHolder>() {
 
-    private var mData: List<WeatherResponse>
+    private var mData: List<WeatherResponse> = items
+    private val mContext: Context = context
     private val inflater: LayoutInflater = LayoutInflater.from(context)
-    private val mContext: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = inflater.inflate(R.layout.list_saved_weather_item, parent, false)
@@ -40,22 +38,23 @@ class FavoriteWeatherItemAdapter(private val context: Context, items: List<Weath
 
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val tvDate: TextView
-        private val tvTown: TextView
-        private val tvTemp: TextView
-        private val layoutMainBackground: LinearLayout
+
+        private val tvDate: TextView = itemView.findViewById(R.id.tvDate)
+        private val tvTown: TextView = itemView.findViewById(R.id.tvTown)
+        private val tvTemp: TextView = itemView.findViewById(R.id.tvTemp)
+        private val layoutMainBackground: LinearLayout = itemView.findViewById(R.id.layoutMainBackground)
+        private val tvIcon: ImageView = itemView.findViewById(R.id.tvIcon)
+        private val tvWeatherDescription: TextView = itemView.findViewById(R.id.tvWeatherDescription)
         private var pos = 0
-        private val tvIcon: ImageView
-        private val tvWeatherDescription: TextView
 
         private var current: WeatherResponse? = null
 
         fun setData(current: WeatherResponse, position: Int) {
             tvDate.text = Utils.getUnderstandableDate(current.dt.toLong())
             tvTown.text = current.name
-            tvTemp.text = "%.1f".format(current.main?.temp) + "\u00B0"
-            setIcon(current)
+            tvTemp.text = current.main?.temp?.let { Utils.formatTemperature(it) }
             tvWeatherDescription.text = current.weather!![0].main
+            setIcon(current)
             this.pos = position
             this.current = current
         }
@@ -64,10 +63,9 @@ class FavoriteWeatherItemAdapter(private val context: Context, items: List<Weath
             when (weatherItem.weather?.get(0)?.main) {
                 "Clouds" -> {
                     Glide.with(mContext).load(R.drawable.partly_sunny).into(tvIcon)
-
                     layoutMainBackground.setBackgroundColor(
                         ContextCompat.getColor(
-                            context,
+                            mContext,
                             R.color.weather_cloudy
                         )
                     )
@@ -76,7 +74,7 @@ class FavoriteWeatherItemAdapter(private val context: Context, items: List<Weath
                     Glide.with(mContext).load(R.drawable.rain).into(tvIcon)
                     layoutMainBackground.setBackgroundColor(
                         ContextCompat.getColor(
-                            context!!,
+                            mContext,
                             R.color.weather_rainy
                         )
                     )
@@ -85,7 +83,7 @@ class FavoriteWeatherItemAdapter(private val context: Context, items: List<Weath
                     Glide.with(mContext).load(R.drawable.clear).into(tvIcon)
                     layoutMainBackground.setBackgroundColor(
                         ContextCompat.getColor(
-                            context!!,
+                            mContext,
                             R.color.weather_sunny
                         )
                     )
@@ -94,32 +92,12 @@ class FavoriteWeatherItemAdapter(private val context: Context, items: List<Weath
                     Glide.with(mContext).load(R.drawable.clear).into(tvIcon)
                     layoutMainBackground.setBackgroundColor(
                         ContextCompat.getColor(
-                            context!!,
+                            mContext,
                             R.color.weather_sunny
                         )
                     )
                 }
             }
         }
-
-
-        init {
-            tvDate = itemView.findViewById(R.id.tvDate)
-            tvTown = itemView.findViewById(R.id.tvTown)
-            tvIcon = itemView.findViewById(R.id.tvIcon)
-            tvWeatherDescription = itemView.findViewById(R.id.tvWeatherDescription)
-            tvTemp = itemView.findViewById(R.id.tvTemp)
-            layoutMainBackground = itemView.findViewById(R.id.layoutMainBackground)
-        }
-    }
-
-
-    companion object {
-        private val TAG = FavoriteWeatherItemAdapter::class.java.simpleName
-    }
-
-    init {
-        mData = items
-        mContext = context
     }
 }

@@ -12,14 +12,13 @@ import com.dvt.weatherapp.R
 import com.dvt.weatherapp.models.WeatherItem
 import com.dvt.weatherapp.util.Utils
 
-
 class WeatherItemAdapter(context: Context, items: List<WeatherItem>) :
 
     RecyclerView.Adapter<WeatherItemAdapter.MyViewHolder>() {
 
-    private var mData: List<WeatherItem>
+    private var mData: List<WeatherItem> = items
     private val inflater: LayoutInflater = LayoutInflater.from(context)
-    private val mContext: Context
+    private val mContext: Context = context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = inflater.inflate(R.layout.list_weather_item, parent, false)
@@ -37,15 +36,17 @@ class WeatherItemAdapter(context: Context, items: List<WeatherItem>) :
 
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val tvDay: TextView
-        private val tvTemp: TextView
-        private var pos = 0
-        private val tvIcon: ImageView
+
+        private val tvDay: TextView = itemView.findViewById(R.id.tvDay)
+        private val tvTemp: TextView = itemView.findViewById(R.id.tvTemp)
+        private val tvIcon: ImageView = itemView.findViewById(R.id.tvIcon)
         private var current: WeatherItem? = null
+        private var pos = 0
+
 
         fun setData(current: WeatherItem, position: Int) {
             tvDay.text = Utils.getDayOfTheWeek(current.dt)
-            tvTemp.text = "%.1f".format(current.main?.temp) + "\u00B0"
+            tvTemp.text = current.main?.temp?.let { Utils.formatTemperature(it) }
             setIcon(current)
             this.pos = position
             this.current = current
@@ -67,22 +68,5 @@ class WeatherItemAdapter(context: Context, items: List<WeatherItem>) :
                 }
             }
         }
-
-
-        init {
-            tvDay = itemView.findViewById(R.id.tvDay)
-            tvIcon = itemView.findViewById(R.id.tvIcon)
-            tvTemp = itemView.findViewById(R.id.tvTemp)
-        }
-    }
-
-
-    companion object {
-        private val TAG = WeatherItemAdapter::class.java.simpleName
-    }
-
-    init {
-        mData = items
-        mContext = context
     }
 }

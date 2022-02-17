@@ -10,7 +10,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 class WeatherResponseViewModel : ViewModel() {
 
     private var weatherRepository: WeatherRepository? = null
@@ -57,5 +56,4 @@ class WeatherResponseViewModel : ViewModel() {
 
         return weatherForecastResponse
     }
-
 }

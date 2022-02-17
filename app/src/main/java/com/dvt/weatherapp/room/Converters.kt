@@ -26,6 +26,6 @@ class Converters {
 
     @TypeConverter
     fun doubleToString(value: Double): String {
-        return Double.toString()
+        return "$value"
     }
 }

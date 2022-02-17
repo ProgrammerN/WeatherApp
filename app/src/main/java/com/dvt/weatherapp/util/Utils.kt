@@ -17,5 +17,9 @@ class Utils {
             return sdf.format(Date(time * 1000))
         }
 
+        fun formatTemperature(temp: Double): String {
+            return "%.1f".format(temp) + "\u00B0"
+        }
+
     }
 }
