@@ -11,9 +11,6 @@ class HomeFragmentTest{
     @Test
     fun favoriteWeather_tasksDisplayFavoriteState() {
         // Given a fresh ViewModel
-        val tasksViewModel = LocalWeatherViewModel(ApplicationProvider.getApplicationContext())
 
-        //CHeck weather no existing id returns false
-        assertThat(tasksViewModel.exists(0), `is`(false))
     }
 }

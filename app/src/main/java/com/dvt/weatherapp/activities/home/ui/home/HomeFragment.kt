@@ -69,7 +69,7 @@ class HomeFragment : Fragment() {
         binding.recyclerView.layoutManager = layoutManager
 
         // initialize fused location client
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         binding.cpLoadCurrentWeather.visibility = View.VISIBLE
 

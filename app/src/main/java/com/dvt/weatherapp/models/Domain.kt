@@ -70,7 +70,7 @@ open class WeatherResponse(
     @Embedded var wind: Wind? = null,
     @Embedded var clouds: Clouds? = null,
     var dt: Int = 0,
-    @Embedded var sys: Sys? = null,
+    @Embedded(prefix = "client_bean_") var sys: Sys? = null,
     var timezone: Int,
     @PrimaryKey(autoGenerate = false) var id: Int? = null,
     var name: String? = null,
