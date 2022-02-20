@@ -37,11 +37,11 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun showFavorites() {
-        localWeatherViewModel.getAllCurrentWeather()?.observe(this, {
-            mWeatherItemAdapter = FavoriteWeatherItemAdapter(context!!, it)
+        localWeatherViewModel.getAllCurrentWeather()?.observe(viewLifecycleOwner) {
+            mWeatherItemAdapter = FavoriteWeatherItemAdapter(requireContext(), it)
             Timber.d(it[0].name.toString())
             binding.recyclerView.adapter = mWeatherItemAdapter
-        })
+        }
     }
 
     override fun onDestroyView() {

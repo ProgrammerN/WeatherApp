@@ -1,10 +1,7 @@
 package com.dvt.weatherapp.models
 
 import android.os.Parcelable
-import androidx.room.ColumnInfo
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -16,7 +13,7 @@ open class Wind(
 
 @Parcelize
 open class Weather(
-    @PrimaryKey(autoGenerate = false) var id: Int? = null,
+    @Ignore @PrimaryKey(autoGenerate = false) @ColumnInfo(name = "weather_id") var id: Int? = null,
     var main: String? = null,
     var description: String? = null,
     var icon: String? = null
@@ -25,11 +22,12 @@ open class Weather(
 @Parcelize
 open class Sys(
     var type: Int = 0,
-    @PrimaryKey(autoGenerate = false) @ColumnInfo(name = "sys_id") var id: Int? = null,
+    @Ignore @PrimaryKey(autoGenerate = false) @ColumnInfo(name = "sys_id") var id: Int? = null,
     var country: String? = null,
     var sunrise: Int = 0,
     var sunset: Int = 0
 ) : Parcelable
+
 
 @Parcelize
 open class Sys2(
@@ -38,13 +36,25 @@ open class Sys2(
 
 @Parcelize
 open class Main(
-    var temp: Double = 0.0,
-    var feels_like: Double = 0.0,
-    var temp_min: Double = 0.0,
-    var temp_max: Double = 0.0,
-    var pressure: Int = 0,
-    var humidity: Int = 0
+    open var temp: Double = 0.0,
+    open var feels_like: Double = 0.0,
+    open var temp_min: Double = 0.0,
+    open var temp_max: Double = 0.0,
+    open var pressure: Int = 0,
+    open var humidity: Int = 0
 ) : Parcelable
+
+/*class Derived(
+    override var temp: Double = 0.0,
+    override var feels_like: Double = 0.0,
+    override var temp_min: Double = 0.0,
+    override var temp_max: Double = 0.0,
+    override var pressure: Int = 0,
+    var sea_level: Int = 0,
+    var grnd_level: Int = 0,
+    override var humidity: Int = 0,
+    var temp_kf: Double = 0.0
+) : Main(temp, feels_like, temp_min, temp_max, pressure, humidity)*/
 
 @Parcelize
 data class Main2(

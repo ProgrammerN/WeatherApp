@@ -13,8 +13,8 @@ class LocalWeatherViewModel(application: Application) : AndroidViewModel(applica
     private val repository = LocalWeatherRepository(application)
 
 
-    fun insert(superhero: WeatherResponse) {
-        repository.insert(superhero)
+    fun insert(weatherResponse: WeatherResponse) {
+        repository.insert(weatherResponse)
     }
 
     fun update(weatherResponse: WeatherResponse) {

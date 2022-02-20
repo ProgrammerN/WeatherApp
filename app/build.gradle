@@ -78,7 +78,7 @@ dependencies {
 
     // Dependencies for local unit tests
     testImplementation "junit:junit:$junitVersion"
-    testImplementation "org.hamcrest:hamcrest-all:$hamcrestVersion"
+    testImplementation "com.google.truth:truth:$truthVersion"
 
     // AndroidX Test - Instrumented testing
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"

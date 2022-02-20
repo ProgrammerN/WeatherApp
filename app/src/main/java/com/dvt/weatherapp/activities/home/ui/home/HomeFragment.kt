@@ -4,10 +4,10 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.VisibleForTesting
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -16,7 +16,6 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.dvt.weatherapp.R
-import com.dvt.weatherapp.activities.home.MainActivity
 import com.dvt.weatherapp.adapters.WeatherItemAdapter
 import com.dvt.weatherapp.databinding.FragmentHomeBinding
 import com.dvt.weatherapp.extentions.showErrorMessage
@@ -47,7 +46,6 @@ class HomeFragment : Fragment() {
 
     private val weatherResponseViewModel: WeatherResponseViewModel by viewModels()
     private val localWeatherViewModel: LocalWeatherViewModel by activityViewModels()
-
     private lateinit var currentWeather: WeatherResponse
     private lateinit var forecastResponse: ForecastResponse
     private lateinit var weatherItemAdapter: WeatherItemAdapter
@@ -98,7 +96,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupRecyclerView(items: List<WeatherItem>) {
-        weatherItemAdapter = WeatherItemAdapter(context!!, items)
+        weatherItemAdapter = WeatherItemAdapter(requireContext(), items)
         binding.recyclerView.adapter = weatherItemAdapter
     }
 
@@ -112,34 +110,40 @@ class HomeFragment : Fragment() {
                         response.body()?.let {
                             binding.fab.visibility = View.VISIBLE
                             currentWeather = response.body()!!
-                            binding.tvWeatherDescription.text = currentWeather.weather?.get(0)?.main?.uppercase(Locale.getDefault())
+                            binding.tvWeatherDescription.text =
+                                currentWeather.weather?.get(0)?.main?.uppercase(Locale.getDefault())
 
-                            binding.tvWeatherTemp.text = Utils.formatTemperature(currentWeather.main?.temp!!)
-                            binding.tvMin.text = Utils.formatTemperature(currentWeather.main?.temp_min!!)
-                            binding.tvCurrent.text = Utils.formatTemperature(currentWeather.main?.temp!!)
-                            binding.tvMax.text = Utils.formatTemperature(currentWeather.main?.temp_max!!)
+                            binding.tvWeatherTemp.text =
+                                Utils.formatTemperature(currentWeather.main?.temp!!)
+                            binding.tvMin.text =
+                                Utils.formatTemperature(currentWeather.main?.temp_min!!)
+                            binding.tvCurrent.text =
+                                Utils.formatTemperature(currentWeather.main?.temp!!)
+                            binding.tvMax.text =
+                                Utils.formatTemperature(currentWeather.main?.temp_max!!)
 
-                            setBackgroundDisplay(currentWeather)
+                            setBackgroundDisplay(currentWeather.weather?.get(0)?.main.toString())
 
                             currentWeather.weather?.get(0)?.id?.let {
-                                localWeatherViewModel.exists(it)?.observe(this, { boolean ->
-                                    //TODO: still to be fixed, figure out best way to deal with weather ids
-                                    if (boolean) {
-                                        binding.fab.setOnClickListener {
-                                            removeCurrentWeatherFromFavorites(
-                                                currentWeather
-                                            )
+                                localWeatherViewModel.exists(it)
+                                    ?.observe(viewLifecycleOwner) { boolean ->
+                                        //TODO: still to be fixed, figure out best way to deal with weather ids
+                                        if (boolean) {
+                                            binding.fab.setOnClickListener {
+                                                removeCurrentWeatherFromFavorites(
+                                                    currentWeather
+                                                )
+                                            }
+                                            binding.fab.setImageResource(R.drawable.ic_baseline_favorite_24)
+                                        } else {
+                                            binding.fab.setOnClickListener {
+                                                favoriteWeather(
+                                                    currentWeather
+                                                )
+                                            }
+                                            binding.fab.setImageResource(R.drawable.ic_baseline_favorite_border_24)
                                         }
-                                        binding.fab.setImageResource(R.drawable.ic_baseline_favorite_24)
-                                    } else {
-                                        binding.fab.setOnClickListener {
-                                            favoriteWeather(
-                                                currentWeather
-                                            )
-                                        }
-                                        binding.fab.setImageResource(R.drawable.ic_baseline_favorite_border_24)
                                     }
-                                })
                             }
                         }
                     } else {
@@ -152,26 +156,27 @@ class HomeFragment : Fragment() {
             }
     }
 
-    private fun setBackgroundDisplay(currentWeather: WeatherResponse) {
-        when (currentWeather.weather?.get(0)?.main) {
+
+    @VisibleForTesting
+    private fun setBackgroundDisplay(weather: String) {
+        when (weather) {
             "Clouds" -> {
-                Glide.with(context!!).load(R.drawable.forest_cloudy)
+                Glide.with(requireContext()).load(R.drawable.forest_cloudy)
                     .into(_binding?.imageViewBackground!!)
                 layout5DayForecast.setBackgroundColor(
                     ContextCompat.getColor(
-                        context!!,
+                        requireContext(),
                         R.color.weather_cloudy
                     )
                 )
-
                 binding.tvWeatherDescription.text = "CLOUDY"
             }
             "Rain" -> {
-                Glide.with(context!!).load(R.drawable.forest_rainy)
+                Glide.with(requireContext()).load(R.drawable.forest_rainy)
                     .into(_binding?.imageViewBackground!!)
                 layout5DayForecast.setBackgroundColor(
                     ContextCompat.getColor(
-                        context!!,
+                        requireContext(),
                         R.color.weather_rainy
                     )
                 )
@@ -179,11 +184,11 @@ class HomeFragment : Fragment() {
                 binding.tvWeatherDescription.text = "RAINY"
             }
             "Clear" -> {
-                Glide.with(context!!).load(R.drawable.forest_sunny)
+                Glide.with(requireContext()).load(R.drawable.forest_sunny)
                     .into(_binding?.imageViewBackground!!)
                 layout5DayForecast.setBackgroundColor(
                     ContextCompat.getColor(
-                        context!!,
+                        requireContext(),
                         R.color.weather_sunny
                     )
                 )
@@ -191,11 +196,11 @@ class HomeFragment : Fragment() {
                 binding.tvWeatherDescription.text = "SUNNY"
             }
             else -> {
-                Glide.with(context!!).load(R.drawable.forest_sunny)
+                Glide.with(requireContext()).load(R.drawable.forest_sunny)
                     .into(_binding?.imageViewBackground!!)
                 layout5DayForecast.setBackgroundColor(
                     ContextCompat.getColor(
-                        context!!,
+                        requireContext(),
                         R.color.weather_sunny
                     )
                 )
@@ -238,7 +243,11 @@ class HomeFragment : Fragment() {
     }
 
     private fun getWeatherDataWithLocationPermission() {
-        if (ActivityCompat.checkSelfPermission(activity!!, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             Dexter.withContext(context)
                 .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
                 .withListener(object : PermissionListener {
@@ -248,13 +257,14 @@ class HomeFragment : Fragment() {
 
                     override fun onPermissionDenied(response: PermissionDeniedResponse) {
                     }
+
                     override fun onPermissionRationaleShouldBeShown(
                         permission: PermissionRequest?,
                         token: PermissionToken?
                     ) { //TODO: Show rational
                     }
                 }).check()
-        }else{
+        } else {
             getLastKnowLocation()
         }
     }
@@ -275,9 +285,5 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-        private val TAG = MainActivity::class.java.simpleName
     }
 }

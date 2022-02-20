@@ -53,6 +53,7 @@ class WeatherItemAdapter(context: Context, items: List<WeatherItem>) :
         }
 
         private fun setIcon(weatherItem: WeatherItem) {
+
             when (weatherItem.weather?.get(0)?.main) {
                 "Clouds" -> {
                     Glide.with(mContext).load(R.drawable.partly_sunny).into(tvIcon)
