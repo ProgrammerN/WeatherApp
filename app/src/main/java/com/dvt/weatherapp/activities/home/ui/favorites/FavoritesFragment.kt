@@ -39,7 +39,6 @@ class FavoritesFragment : Fragment() {
 
     private fun showFavorites() {
         localWeatherViewModel.getAllCurrentWeather()?.observe(viewLifecycleOwner) {
-
             if (it.isNotEmpty()){
                 mWeatherItemAdapter = FavoriteWeatherItemAdapter(requireContext(), it)
                 Timber.d(it[0].name.toString())
