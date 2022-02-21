@@ -17,4 +17,10 @@
         android:label="@string/menu_favorites"
         tools:layout="@layout/fragment_favorites" />
 
+    <fragment
+        android:id="@+id/nav_favorites_map_view"
+        android:name="com.dvt.weatherapp.activities.home.ui.map.FavoritesMapView"
+        android:label="@string/menu_favorites_map_view"
+        tools:layout="@layout/fragment_favorite_map_view" />
+
 </navigation>

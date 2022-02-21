@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dvt.weatherapp.adapters.FavoriteWeatherItemAdapter
 import com.dvt.weatherapp.databinding.FragmentFavoritesBinding
+import com.dvt.weatherapp.extentions.toast
 import com.dvt.weatherapp.viewmodels.LocalWeatherViewModel
 import timber.log.Timber
 
@@ -38,9 +39,14 @@ class FavoritesFragment : Fragment() {
 
     private fun showFavorites() {
         localWeatherViewModel.getAllCurrentWeather()?.observe(viewLifecycleOwner) {
-            mWeatherItemAdapter = FavoriteWeatherItemAdapter(requireContext(), it)
-            Timber.d(it[0].name.toString())
-            binding.recyclerView.adapter = mWeatherItemAdapter
+
+            if (it.isNotEmpty()){
+                mWeatherItemAdapter = FavoriteWeatherItemAdapter(requireContext(), it)
+                Timber.d(it[0].name.toString())
+                binding.recyclerView.adapter = mWeatherItemAdapter
+            }else{
+                requireContext().toast("No favorites found")
+            }
         }
     }
 

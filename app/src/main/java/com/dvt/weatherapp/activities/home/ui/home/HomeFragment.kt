@@ -124,10 +124,9 @@ class HomeFragment : Fragment() {
 
                             setBackgroundDisplay(currentWeather.weather?.get(0)?.main.toString())
 
-                            currentWeather.weather?.get(0)?.id?.let {
+                            currentWeather.id?.let {
                                 localWeatherViewModel.exists(it)
                                     ?.observe(viewLifecycleOwner) { boolean ->
-                                        //TODO: still to be fixed, figure out best way to deal with weather ids
                                         if (boolean) {
                                             binding.fab.setOnClickListener {
                                                 removeCurrentWeatherFromFavorites(
@@ -274,10 +273,10 @@ class HomeFragment : Fragment() {
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
             latitude = location.latitude
             longitude = location.longitude
-            fetchCurrentWeatherInformation(latitude, longitude)
-            fetchWeatherForecastInformation(latitude, longitude)
+            fetchCurrentWeatherInformation(latitude,longitude)
+            fetchWeatherForecastInformation(latitude,longitude)
         }.addOnFailureListener {
-            context?.toast("Failed on getting current location")
+            requireContext().toast("Failed on getting current location")
         }
     }
 
