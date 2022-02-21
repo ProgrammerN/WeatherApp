@@ -13,6 +13,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
@@ -42,16 +43,26 @@ class FavoritesMapView : Fragment(), GoogleMap.OnMarkerClickListener {
 
     private fun showFavorites(googleMap: GoogleMap) {
         localWeatherViewModel.getAllCurrentWeather()?.observe(viewLifecycleOwner) {
-            for (weatherResponse in it) {
-
-                val marker = LatLng(weatherResponse.coord!!.lat, weatherResponse.coord!!.lon)
-
-                googleMap.addMarker(MarkerOptions()
+            if (it.isNotEmpty()){
+                for (weatherResponse in it) {
+                    val marker = LatLng(weatherResponse.coord!!.lat, weatherResponse.coord!!.lon)
+                    googleMap.addMarker(MarkerOptions()
                         .position(marker)
-                        .title(weatherResponse.name)
-                )
+                        .title(weatherResponse.name))
+                }
 
-                googleMap.moveCamera(CameraUpdateFactory.newLatLng(marker))
+                val mountainView = LatLng(it[0].coord!!.lat, it[0].coord!!.lon)
+                googleMap.setMinZoomPreference(6.0f)
+                googleMap.setMaxZoomPreference(14.0f)
+                googleMap.moveCamera(CameraUpdateFactory.newLatLng(mountainView))
+                val cameraPosition = CameraPosition.Builder()
+                    .target(mountainView) // Sets the center of the map to Mountain View
+                    .zoom(17f)            // Sets the zoom
+                    .tilt(30f)            // Sets the tilt of the camera to 30 degrees
+                    .build()              // Creates a CameraPosition from the builder
+                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+            }else{
+                requireContext().toast("No favorites found")
             }
         }
     }
