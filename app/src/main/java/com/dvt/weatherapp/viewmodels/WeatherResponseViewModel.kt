@@ -53,7 +53,6 @@ class WeatherResponseViewModel : ViewModel() {
                     errorMessage.value = t.toString()
                 }
             })
-
         return weatherForecastResponse
     }
 }

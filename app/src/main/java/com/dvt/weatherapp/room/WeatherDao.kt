@@ -20,9 +20,6 @@ interface WeatherDao {
     @Query("SELECT EXISTS(SELECT * FROM current_weather_table WHERE id=(:id))")
     fun exists(id: Int): LiveData<Boolean>
 
-    /*@Query("delete from superheroes_table")
-    suspend fun deleteAllSuperheros()*/
-
     @Query("select * from current_weather_table")
     fun getAllCurrentWeather(): LiveData<List<WeatherResponse>>
 }

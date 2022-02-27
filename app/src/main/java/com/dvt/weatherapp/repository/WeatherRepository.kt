@@ -8,16 +8,15 @@ import retrofit2.Call
 
 class WeatherRepository {
 
-    private val mService: WeatherAPIService by lazy {
+    private val weatherAPIService: WeatherAPIService by lazy {
         RetrofitClient.weatherAPIService
     }
 
     fun getSearchResponse(lat: Double, lon: Double): Call<WeatherResponse> {
-        return mService.currentWeather(lat, lon)
+        return weatherAPIService.currentWeather(lat, lon)
     }
 
     fun getWeatherForecastResponse(lat: Double, lon: Double): Call<ForecastResponse> {
-        return mService.weatherForecast(lat, lon)
+        return weatherAPIService.weatherForecast(lat, lon)
     }
-
 }

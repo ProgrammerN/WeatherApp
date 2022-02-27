@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.dvt.weatherapp.R
 import com.dvt.weatherapp.models.WeatherResponse
 import com.dvt.weatherapp.util.Utils
+import timber.log.Timber
 
 class FavoriteWeatherItemAdapter(context: Context, items: List<WeatherResponse>) :
 
@@ -38,7 +39,6 @@ class FavoriteWeatherItemAdapter(context: Context, items: List<WeatherResponse>)
 
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
         private val tvDate: TextView = itemView.findViewById(R.id.tvDate)
         private val tvTown: TextView = itemView.findViewById(R.id.tvTown)
         private val tvTemp: TextView = itemView.findViewById(R.id.tvTemp)
@@ -46,7 +46,6 @@ class FavoriteWeatherItemAdapter(context: Context, items: List<WeatherResponse>)
         private val tvIcon: ImageView = itemView.findViewById(R.id.tvIcon)
         private val tvWeatherDescription: TextView = itemView.findViewById(R.id.tvWeatherDescription)
         private var pos = 0
-
         private var current: WeatherResponse? = null
 
         fun setData(current: WeatherResponse, position: Int) {

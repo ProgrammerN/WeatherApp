@@ -11,12 +11,12 @@ import androidx.annotation.VisibleForTesting
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.dvt.weatherapp.R
 import com.dvt.weatherapp.adapters.WeatherItemAdapter
+import com.dvt.weatherapp.component.DaggerAppComponent
 import com.dvt.weatherapp.databinding.FragmentHomeBinding
 import com.dvt.weatherapp.extentions.showErrorMessage
 import com.dvt.weatherapp.extentions.toast
@@ -45,7 +45,7 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val weatherResponseViewModel: WeatherResponseViewModel by viewModels()
-    private val localWeatherViewModel: LocalWeatherViewModel by activityViewModels()
+    private lateinit var localWeatherViewModel: LocalWeatherViewModel
     private lateinit var currentWeather: WeatherResponse
     private lateinit var forecastResponse: ForecastResponse
     private lateinit var weatherItemAdapter: WeatherItemAdapter
@@ -63,6 +63,7 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.recyclerView.layoutManager = layoutManager
 
@@ -72,6 +73,10 @@ class HomeFragment : Fragment() {
         binding.cpLoadCurrentWeather.visibility = View.VISIBLE
 
         binding.fab.visibility = View.GONE
+
+        var appComponent = DaggerAppComponent.create()
+
+        localWeatherViewModel = appComponent.localWeatherViewModel()
 
         getWeatherDataWithLocationPermission()
 
@@ -271,10 +276,10 @@ class HomeFragment : Fragment() {
     @SuppressLint("MissingPermission")
     private fun getLastKnowLocation() {
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-            latitude = location.latitude
-            longitude = location.longitude
-            fetchCurrentWeatherInformation(latitude,longitude)
-            fetchWeatherForecastInformation(latitude,longitude)
+            /*latitude = location.latitude
+            longitude = location.longitude*/
+            fetchCurrentWeatherInformation(35.0, 139.0)
+            fetchWeatherForecastInformation(35.0, 139.0)
         }.addOnFailureListener {
             requireContext().toast("Failed on getting current location")
         }

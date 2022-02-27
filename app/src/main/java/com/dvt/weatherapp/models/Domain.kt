@@ -2,6 +2,7 @@ package com.dvt.weatherapp.models
 
 import android.os.Parcelable
 import androidx.room.*
+import com.dvt.weatherapp.room.Converters
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -73,7 +74,7 @@ data class Main2(
 @Entity(tableName = "current_weather_table")
 open class WeatherResponse(
     @Embedded var coord: Coordinates? = null,
-    var weather: List<Weather>? = null,
+    @TypeConverters(Converters::class) var weather: List<Weather>? = null,
     var base: String? = null,
     @Embedded var main: Main? = null,
     var visibility: Int = 0,

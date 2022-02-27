@@ -67,5 +67,4 @@ class LocalWeatherRepository(application: Application) : CoroutineScope {
         weatherResponseList = weatherDao?.getAllCurrentWeather()
         return weatherResponseList
     }
-
 }

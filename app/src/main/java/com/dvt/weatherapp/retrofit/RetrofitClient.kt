@@ -1,8 +1,12 @@
 package com.dvt.weatherapp.retrofit
 
+import dagger.Module
+import dagger.Provides
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+
+@Module
 object RetrofitClient {
 
     private const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
@@ -12,4 +16,5 @@ object RetrofitClient {
         .build()
 
     val weatherAPIService: WeatherAPIService = retrofit.create(WeatherAPIService::class.java)
+
 }

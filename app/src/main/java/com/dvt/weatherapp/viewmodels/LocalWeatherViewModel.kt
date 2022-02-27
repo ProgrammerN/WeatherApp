@@ -5,20 +5,17 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.dvt.weatherapp.models.WeatherResponse
 import com.dvt.weatherapp.repository.LocalWeatherRepository
+import javax.inject.Inject
 
-class LocalWeatherViewModel(application: Application) : AndroidViewModel(application) {
+class LocalWeatherViewModel @Inject constructor(application: Application) :
+    AndroidViewModel(application) {
 
     private var saveWeatherResponse: LiveData<List<WeatherResponse>>? = null
     private var exist: LiveData<Boolean>? = null
     private val repository = LocalWeatherRepository(application)
 
-
     fun insert(weatherResponse: WeatherResponse) {
         repository.insert(weatherResponse)
-    }
-
-    fun update(weatherResponse: WeatherResponse) {
-        repository.update(weatherResponse)
     }
 
     fun delete(weatherResponse: WeatherResponse) {
@@ -29,7 +26,6 @@ class LocalWeatherViewModel(application: Application) : AndroidViewModel(applica
         exist = repository.exists(id)
         return exist
     }
-
 
     fun getAllCurrentWeather(): LiveData<List<WeatherResponse>>? {
         saveWeatherResponse = repository.getAllCurrentWeather()
