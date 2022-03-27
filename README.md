@@ -2,7 +2,7 @@
 
 ### This is a simple Weather App that uses Kotlin and the Jetpack library 
 Libraries used are
-- Hilt
+- Dagger
 - Retrofit
 - Timber
 - Glide
