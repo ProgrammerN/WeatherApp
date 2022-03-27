@@ -9,3 +9,6 @@ Libraries used are
 - Jetpack navigation
 - Jetpack Viewmodels and Livedata
 
+To get the app running on your local machine, navigate to Constants and paste your api key there. 
+Get an api key from [here](https://openweathermap.org/api).
+
